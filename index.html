@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexForm — Presencia Digital para Profesionales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0d0d;
+    --paper: #f5f2ed;
+    --paper2: #eeebe4;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --slate: #3a3a3a;
+    --muted: #888580;
+    --law: #1a2744;
+    --med: #1a3530;
+    --arch: #2d1a10;
+    --law-accent: #4a6fa5;
+    --med-accent: #3d8b6e;
+    --arch-accent: #c2714f;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width .2s, height .2s, background .2s;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform .12s ease-out, width .2s, height .2s;
+    opacity: .6;
+  }
+
+  /* Language switcher */
+  .lang-switcher {
+    position: fixed; top: 2rem; right: 2rem;
+    z-index: 1000;
+    display: flex; gap: .5rem;
+  }
+  .lang-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .7rem; letter-spacing: .12em; font-weight: 500;
+    padding: .4rem .9rem;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--ink);
+    cursor: none;
+    transition: background .25s, color .25s;
+  }
+  .lang-btn.active, .lang-btn:hover {
+    background: var(--gold);
+    color: #fff;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.8rem 4rem;
+    transition: background .4s, padding .4s, box-shadow .4s;
+  }
+  nav.scrolled {
+    background: rgba(245,242,237,.96);
+    backdrop-filter: blur(12px);
+    padding: 1.2rem 4rem;
+    box-shadow: 0 1px 0 rgba(0,0,0,.06);
+  }
+  .nav-logo {
+    display: flex; flex-direction: column; align-items: flex-start;
+    text-decoration: none; gap: 3px;
+  }
+  .nav-logo-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.45rem; font-weight: 600; letter-spacing: .04em;
+    color: var(--ink); line-height: 1;
+    display: flex; align-items: baseline;
+  }
+  .nav-logo-name .logo-form { color: var(--gold); }
+  .nav-logo-bottom {
+    display: flex; align-items: center; gap: .45rem;
+  }
+  .nav-logo-bar { flex: 1; height: 1px; background: var(--gold); min-width: 22px; }
+  .nav-logo-28 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .6rem; font-weight: 600;
+    color: var(--gold); letter-spacing: .06em;
+  }
+  .nav-logo-cr {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .52rem; font-weight: 400;
+    color: var(--muted); letter-spacing: .18em; text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--slate); text-decoration: none;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -.2rem; left: 0;
+    width: 0; height: 1px; background: var(--gold);
+    transition: width .3s;
+  }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    position: relative; overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 4rem 6rem 5rem;
+    position: relative; z-index: 2;
+  }
+  .hero-tag {
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 2rem;
+    display: flex; align-items: center; gap: .8rem;
+  }
+  .hero-tag::before {
+    content: ''; width: 2rem; height: 1px; background: var(--gold);
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 300; line-height: 1.05;
+    letter-spacing: -.01em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-subtitle {
+    font-size: 1rem; color: var(--muted); line-height: 1.8;
+    max-width: 38ch; margin-bottom: 3rem; font-weight: 300;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 1rem;
+    font-size: .82rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: .4rem;
+    transition: color .3s, gap .3s;
+  }
+  .hero-cta:hover { color: var(--gold); gap: 1.5rem; }
+  .hero-cta-arrow { font-size: 1.2rem; }
+
+  .hero-right {
+    position: relative; overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--paper2) 0%, #e0d9cd 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    display: grid; grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1px;
+    background: rgba(201,168,76,.15);
+    padding: 4rem 3rem 4rem 4rem;
+    z-index: 1;
+  }
+  .hero-card {
+    background: var(--paper);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 1.8rem;
+    position: relative; overflow: hidden;
+    transition: transform .4s cubic-bezier(.25,.8,.25,1);
+    cursor: none;
+  }
+  .hero-card:hover { transform: scale(.97); }
+  .hero-card-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem; font-weight: 300; opacity: .07;
+    position: absolute; top: .5rem; right: 1rem; line-height: 1;
+  }
+  .hero-card-icon {
+    font-size: 1.6rem; margin-bottom: 1rem;
+  }
+  .hero-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600; margin-bottom: .3rem;
+  }
+  .hero-card-sub {
+    font-size: .72rem; color: var(--muted); letter-spacing: .05em;
+  }
+  .hero-card-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .card-law .hero-card-bar { background: var(--law-accent); }
+  .card-med .hero-card-bar { background: var(--med-accent); }
+  .card-arch .hero-card-bar { background: var(--arch-accent); }
+  .hero-card:last-child .hero-card-bar { background: var(--gold); }
+
+  /* Decorative lines */
+  .deco-line {
+    position: absolute;
+    background: var(--gold);
+    opacity: .2;
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--ink);
+    padding: 1.1rem 0;
+    overflow: hidden;
+  }
+  .marquee-track {
+    display: flex; gap: 3rem;
+    white-space: nowrap;
+    animation: marquee 30s linear infinite;
+  }
+  .marquee-track span {
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold-light); flex-shrink: 0;
+  }
+  .marquee-track .dot { color: var(--gold); }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTION COMMONS */
+  section { padding: 7rem 5rem; }
+
+  .section-tag {
+    font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: .8rem;
+  }
+  .section-tag::before { content: ''; width: 1.5rem; height: 1px; background: var(--gold); }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.8rem);
+    font-weight: 300; line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  /* SERVICES (how it works) */
+  .services { background: var(--ink); color: var(--paper); }
+  .services .section-tag { color: var(--gold); }
+  .services .section-title { color: var(--paper); }
+
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; margin-top: 4rem;
+    background: rgba(255,255,255,.06);
+  }
+  .service-item {
+    background: var(--ink);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: background .3s;
+    border: 1px solid transparent;
+  }
+  .service-item:hover {
+    background: #161616;
+    border-color: rgba(201,168,76,.25);
+  }
+  .service-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: .85rem; color: var(--gold); letter-spacing: .1em;
+    margin-bottom: 1.5rem;
+  }
+  .service-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 400; color: var(--paper);
+    margin-bottom: 1rem; line-height: 1.2;
+  }
+  .service-desc {
+    font-size: .88rem; color: #888; line-height: 1.8; font-weight: 300;
+  }
+
+  /* PROFESSIONS SHOWCASE */
+  .professions { background: var(--paper2); }
+  .prof-intro {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: end; margin-bottom: 5rem;
+  }
+  .prof-intro-right p {
+    font-size: .95rem; color: var(--muted); line-height: 1.9; font-weight: 300;
+  }
+
+  .prof-tabs {
+    display: flex; gap: 0; margin-bottom: 3rem;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+  }
+  .prof-tab {
+    font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+    padding: 1rem 2rem;
+    border: none; background: transparent;
+    color: var(--muted); cursor: none;
+    position: relative; font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    transition: color .3s;
+  }
+  .prof-tab::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 2px; background: var(--gold);
+    transform: scaleX(0); transition: transform .3s;
+  }
+  .prof-tab.active { color: var(--ink); }
+  .prof-tab.active::after { transform: scaleX(1); }
+  .prof-tab:hover { color: var(--ink); }
+
+  .prof-panel { display: none; }
+  .prof-panel.active { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start; }
+
+  .prof-panel-info {}
+  .prof-panel-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; font-weight: 300; line-height: 1.1; margin-bottom: .5rem;
+  }
+  .prof-panel-firm {
+    font-size: .8rem; color: var(--gold); letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  .prof-panel-desc {
+    font-size: .9rem; color: var(--muted); line-height: 1.9; margin-bottom: 2.5rem; font-weight: 300;
+  }
+  .prof-features { list-style: none; margin-bottom: 3rem; }
+  .prof-features li {
+    font-size: .85rem; color: var(--slate); padding: .7rem 0;
+    border-bottom: 1px solid rgba(0,0,0,.07);
+    display: flex; align-items: center; gap: .8rem;
+  }
+  .prof-features li::before { content: '→'; color: var(--gold); font-size: .8rem; }
+
+  .prof-cta {
+    display: inline-flex; align-items: center; gap: .8rem;
+    font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+    padding: 1rem 2rem;
+    background: var(--ink); color: var(--paper);
+    text-decoration: none;
+    transition: background .3s;
+  }
+  .prof-cta:hover { background: var(--gold); }
+
+  .prof-panel-preview {
+    position: relative;
+  }
+
+  /* Mock browser window */
+  .mock-browser {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.15), 0 2px 8px rgba(0,0,0,.05);
+    overflow: hidden;
+  }
+  .browser-bar {
+    background: #f0ede8;
+    padding: .6rem 1rem;
+    display: flex; align-items: center; gap: .6rem;
+    border-bottom: 1px solid #e0ddd8;
+  }
+  .browser-dots { display: flex; gap: .4rem; }
+  .browser-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .browser-dot:nth-child(1) { background: #ff5f57; }
+  .browser-dot:nth-child(2) { background: #ffbd2e; }
+  .browser-dot:nth-child(3) { background: #28c840; }
+  .browser-url {
+    flex: 1; background: #fff; border-radius: 4px;
+    padding: .25rem .8rem; font-size: .7rem; color: var(--muted);
+    margin: 0 .5rem;
+  }
+  .browser-body { overflow: hidden; }
+
+  /* Law preview */
+  .law-preview {
+    background: var(--law);
+    color: #fff; padding: 1.5rem;
+    font-size: .7rem; min-height: 320px;
+  }
+  .law-preview-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.5rem; padding-bottom: .8rem;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+  .law-preview-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: .95rem; letter-spacing: .05em;
+  }
+  .law-preview-links { display: flex; gap: .8rem; color: rgba(255,255,255,.5); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; }
+  .law-preview-hero {
+    padding: 1rem 0;
+  }
+  .law-preview-tag { font-size: .55rem; letter-spacing: .2em; text-transform: uppercase; color: var(--law-accent); margin-bottom: .5rem; }
+  .law-preview-title { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; line-height: 1.1; margin-bottom: .8rem; }
+  .law-preview-sub { font-size: .6rem; color: rgba(255,255,255,.5); line-height: 1.7; max-width: 30ch; margin-bottom: 1rem; }
+  .law-preview-btn {
+    display: inline-block; padding: .4rem .9rem; background: var(--law-accent);
+    font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: #fff;
+  }
+  .law-preview-areas {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: .5rem; margin-top: 1.2rem;
+  }
+  .law-area-chip {
+    background: rgba(255,255,255,.05); padding: .5rem .6rem;
+    font-size: .55rem; color: rgba(255,255,255,.7);
+    border-left: 2px solid var(--law-accent);
+  }
+
+  /* Med preview */
+  .med-preview {
+    background: #f9faf8; color: var(--ink);
+    padding: 1.5rem; min-height: 320px; font-size: .7rem;
+  }
+  .med-preview-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.2rem;
+  }
+  .med-preview-logo { font-family: 'Cormorant Garamond', serif; font-size: .9rem; color: var(--med); }
+  .med-preview-links { display: flex; gap: .7rem; font-size: .6rem; color: #999; text-transform: uppercase; letter-spacing: .08em; }
+  .med-banner {
+    background: var(--med); padding: 1.2rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: .8rem;
+  }
+  .med-banner-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 300; color: #fff; line-height: 1.2; }
+  .med-banner-right { color: rgba(255,255,255,.6); font-size: .58rem; line-height: 1.7; }
+  .med-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: .5rem; }
+  .med-card { background: #fff; padding: .7rem; border-top: 2px solid var(--med-accent); }
+  .med-card-icon { font-size: .9rem; margin-bottom: .3rem; }
+  .med-card-t { font-size: .62rem; font-weight: 500; margin-bottom: .2rem; }
+  .med-card-s { font-size: .56rem; color: #999; line-height: 1.5; }
+
+  /* Arch preview */
+  .arch-preview {
+    background: #faf8f5; color: var(--ink);
+    padding: 1.5rem; min-height: 320px; font-size: .7rem;
+  }
+  .arch-preview-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1rem; padding-bottom: .7rem;
+    border-bottom: 1px solid #e8e3dc;
+  }
+  .arch-preview-logo { font-family: 'Cormorant Garamond', serif; font-size: .9rem; letter-spacing: .15em; text-transform: uppercase; }
+  .arch-preview-links { display: flex; gap: .7rem; font-size: .58rem; color: #aaa; text-transform: uppercase; letter-spacing: .1em; }
+  .arch-hero-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: .8rem; margin-bottom: .8rem; }
+  .arch-main-img {
+    background: linear-gradient(160deg, #c2714f 0%, var(--arch) 100%);
+    height: 130px; display: flex; align-items: flex-end; padding: .8rem;
+  }
+  .arch-main-label { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #fff; font-weight: 300; }
+  .arch-side { display: flex; flex-direction: column; gap: .5rem; }
+  .arch-side-card { background: #f0ece5; padding: .6rem; flex: 1; font-size: .58rem; color: #666; }
+  .arch-side-card b { display: block; font-size: .62rem; color: var(--ink); margin-bottom: .2rem; font-weight: 500; }
+  .arch-projects { display: grid; grid-template-columns: repeat(3,1fr); gap: .5rem; }
+  .arch-proj { font-size: .58rem; color: #777; }
+  .arch-proj-img { height: 50px; margin-bottom: .3rem; }
+  .arch-proj-img-1 { background: linear-gradient(135deg, #d4c5b0, #b0a090); }
+  .arch-proj-img-2 { background: linear-gradient(135deg, #a89070, #7a6a55); }
+  .arch-proj-img-3 { background: linear-gradient(135deg, #c8b898, #9a8878); }
+  .arch-proj-title { font-weight: 500; color: var(--ink); font-size: .6rem; }
+
+  /* PRICING */
+  .pricing { background: var(--paper); }
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 2px; margin-top: 4rem;
+    background: rgba(0,0,0,.06);
+  }
+  .price-card {
+    background: var(--paper2); padding: 3rem 2.5rem;
+    position: relative; overflow: hidden;
+    transition: transform .3s;
+  }
+  .price-card:hover { transform: translateY(-4px); }
+  .price-card.featured {
+    background: var(--ink); color: var(--paper);
+  }
+  .price-label {
+    font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+  }
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300; line-height: 1;
+    margin-bottom: .3rem;
+  }
+  .price-period { font-size: .8rem; color: var(--muted); margin-bottom: 2rem; }
+  .price-card.featured .price-period { color: #888; }
+  .price-divider { height: 1px; background: rgba(0,0,0,.1); margin-bottom: 2rem; }
+  .price-card.featured .price-divider { background: rgba(255,255,255,.1); }
+  .price-features { list-style: none; margin-bottom: 2.5rem; }
+  .price-features li {
+    font-size: .85rem; color: var(--slate); padding: .6rem 0;
+    display: flex; align-items: center; gap: .8rem;
+    border-bottom: 1px solid rgba(0,0,0,.05);
+  }
+  .price-card.featured .price-features li { color: #ccc; border-color: rgba(255,255,255,.06); }
+  .price-features li::before { content: '✓'; color: var(--gold); font-size: .85rem; flex-shrink: 0; }
+  .price-btn {
+    display: block; width: 100%;
+    padding: .9rem; text-align: center;
+    font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+    text-decoration: none; cursor: none;
+    transition: background .3s, color .3s;
+  }
+  .price-btn-outline {
+    border: 1px solid var(--ink); color: var(--ink);
+    background: transparent;
+  }
+  .price-btn-outline:hover { background: var(--ink); color: var(--paper); }
+  .price-btn-fill {
+    background: var(--gold); color: #fff; border: 1px solid var(--gold);
+  }
+  .price-btn-fill:hover { background: #b5913a; border-color: #b5913a; }
+
+  /* STATS */
+  .stats-bar {
+    background: var(--paper2);
+    padding: 4rem 5rem;
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 2px;
+    border-top: 1px solid rgba(0,0,0,.06);
+    border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+  .stat-item { padding: 2rem 2.5rem; text-align: center; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem; font-weight: 300; line-height: 1;
+    color: var(--ink); margin-bottom: .3rem;
+  }
+  .stat-num span { color: var(--gold); }
+  .stat-label { font-size: .75rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+
+  /* CONTACT */
+  .contact { background: var(--ink); color: var(--paper); }
+  .contact .section-tag { color: var(--gold); }
+  .contact .section-title { color: var(--paper); }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 4rem; }
+  .contact-info p {
+    font-size: .9rem; color: #888; line-height: 1.9; font-weight: 300; margin-bottom: 2.5rem;
+  }
+  .contact-detail { margin-bottom: 1.2rem; }
+  .contact-detail-label { font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: .2rem; }
+  .contact-detail-val { font-size: .95rem; color: var(--paper); }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-field { display: flex; flex-direction: column; gap: .4rem; }
+  .form-field label { font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); }
+  .form-field input, .form-field select, .form-field textarea {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.1);
+    padding: .9rem 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: .88rem;
+    color: var(--paper); outline: none;
+    transition: border-color .3s;
+  }
+  .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+    border-color: var(--gold);
+  }
+  .form-field textarea { min-height: 100px; resize: vertical; }
+  .form-field select { cursor: none; }
+  .form-field select option { background: #111; }
+  .form-submit {
+    padding: 1rem 2rem; background: var(--gold); color: #fff;
+    border: none; cursor: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+    align-self: flex-start;
+    transition: background .3s;
+  }
+  .form-submit:hover { background: #b5913a; }
+
+  /* FOOTER */
+  footer {
+    background: #080808; color: #666;
+    padding: 3rem 5rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.2rem;
+    color: var(--paper);
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-copy { font-size: .72rem; letter-spacing: .05em; }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a { font-size: .72rem; color: #666; text-decoration: none; letter-spacing: .05em; }
+  .footer-links a:hover { color: var(--gold); }
+
+  /* Animations */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* lang toggles */
+  [data-en] { display: none; }
+  body.en [data-es] { display: none; }
+  body.en [data-en] { display: block; }
+  body.en .d-en-inline { display: inline !important; }
+  body.en .d-es-inline { display: none !important; }
+  .d-es-inline { display: inline; }
+  .d-en-inline { display: none; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--paper); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.5rem 2rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    section { padding: 5rem 2rem; }
+    .services-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .prof-intro, .contact-grid, .prof-panel.active { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Language Switcher -->
+<div class="lang-switcher">
+  <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+  <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-name">Nex<span class="logo-form">Form</span></div>
+    <div class="nav-logo-bottom">
+      <div class="nav-logo-bar"></div>
+      <span class="nav-logo-28">28</span>
+      <div class="nav-logo-bar"></div>
+      <span class="nav-logo-cr">CR</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#servicios">
+      <span data-es>Servicios</span>
+      <span data-en>Services</span>
+    </a></li>
+    <li><a href="#profesiones">
+      <span data-es>Ejemplos</span>
+      <span data-en>Examples</span>
+    </a></li>
+    <li><a href="#precios">
+      <span data-es>Planes</span>
+      <span data-en>Plans</span>
+    </a></li>
+    <li><a href="#contacto">
+      <span data-es>Contacto</span>
+      <span data-en>Contact</span>
+    </a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-left">
+    <p class="hero-tag">
+      <span data-es>Presencia digital de élite</span>
+      <span data-en>Elite digital presence</span>
+    </p>
+    <h1 class="hero-title">
+      <span data-es>Tu firma,<br><em>en línea.</em><br>Tu legado,<br>protegido.</span>
+      <span data-en>Your firm,<br><em>online.</em><br>Your legacy,<br>protected.</span>
+    </h1>
+    <p class="hero-subtitle">
+      <span data-es>Diseñamos y mantenemos la presencia web de abogados, médicos y arquitectos que exigen lo mejor. Páginas que generan confianza y clientes.</span>
+      <span data-en>We design and maintain the web presence of lawyers, doctors, and architects who demand the best. Pages that generate trust and clients.</span>
+    </p>
+    <a href="#profesiones" class="hero-cta">
+      <span data-es>Ver ejemplos</span>
+      <span data-en>View examples</span>
+      <span class="hero-cta-arrow">→</span>
+    </a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-grid">
+      <a href="#profesiones" class="hero-card card-law" onclick="switchTab('law')">
+        <div class="hero-card-num">01</div>
+        <div class="hero-card-icon">⚖️</div>
+        <div class="hero-card-title">
+          <span data-es>Abogados</span>
+          <span data-en>Lawyers</span>
+        </div>
+        <div class="hero-card-sub">
+          <span data-es>Ver ejemplo →</span>
+          <span data-en>View example →</span>
+        </div>
+        <div class="hero-card-bar"></div>
+      </a>
+      <a href="#profesiones" class="hero-card card-med" onclick="switchTab('med')">
+        <div class="hero-card-num">02</div>
+        <div class="hero-card-icon">🩺</div>
+        <div class="hero-card-title">
+          <span data-es>Médicos</span>
+          <span data-en>Doctors</span>
+        </div>
+        <div class="hero-card-sub">
+          <span data-es>Ver ejemplo →</span>
+          <span data-en>View example →</span>
+        </div>
+        <div class="hero-card-bar"></div>
+      </a>
+      <a href="#profesiones" class="hero-card card-arch" onclick="switchTab('arch')">
+        <div class="hero-card-num">03</div>
+        <div class="hero-card-icon">📐</div>
+        <div class="hero-card-title">
+          <span data-es>Arquitectos</span>
+          <span data-en>Architects</span>
+        </div>
+        <div class="hero-card-sub">
+          <span data-es>Ver ejemplo →</span>
+          <span data-en>View example →</span>
+        </div>
+        <div class="hero-card-bar"></div>
+      </a>
+      <div class="hero-card" style="background: var(--paper2);">
+        <div class="hero-card-num">+</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;line-height:1.4;">
+          <span data-es>Más de <strong>50</strong> profesionales confían en NexForm</span>
+          <span data-en>Over <strong>50</strong> professionals trust NexForm</span>
+        </div>
+        <div class="hero-card-bar" style="background:var(--gold)"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>Diseño Web</span><span class="dot">◆</span>
+    <span>Mantenimiento Anual</span><span class="dot">◆</span>
+    <span>SEO Profesional</span><span class="dot">◆</span>
+    <span>Dominio Incluido</span><span class="dot">◆</span>
+    <span>Soporte 24/7</span><span class="dot">◆</span>
+    <span>Web Design</span><span class="dot">◆</span>
+    <span>Annual Maintenance</span><span class="dot">◆</span>
+    <span>Professional SEO</span><span class="dot">◆</span>
+    <span>Domain Included</span><span class="dot">◆</span>
+    <span>24/7 Support</span><span class="dot">◆</span>
+    <span>Diseño Web</span><span class="dot">◆</span>
+    <span>Mantenimiento Anual</span><span class="dot">◆</span>
+    <span>SEO Profesional</span><span class="dot">◆</span>
+    <span>Dominio Incluido</span><span class="dot">◆</span>
+    <span>Soporte 24/7</span><span class="dot">◆</span>
+    <span>Web Design</span><span class="dot">◆</span>
+    <span>Annual Maintenance</span><span class="dot">◆</span>
+    <span>Professional SEO</span><span class="dot">◆</span>
+    <span>Domain Included</span><span class="dot">◆</span>
+    <span>24/7 Support</span><span class="dot">◆</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="servicios">
+  <p class="section-tag">
+    <span data-es>Lo que hacemos</span>
+    <span data-en>What we do</span>
+  </p>
+  <h2 class="section-title">
+    <span data-es>Un servicio <em>completo</em><br>para tu carrera</span>
+    <span data-en>A <em>complete</em> service<br>for your career</span>
+  </h2>
+  <div class="services-grid">
+    <div class="service-item fade-up">
+      <div class="service-num">01</div>
+      <div class="service-title">
+        <span data-es>Diseño a medida</span>
+        <span data-en>Custom design</span>
+      </div>
+      <div class="service-desc">
+        <span data-es>Creamos una identidad digital única que refleja tu trayectoria y especialidad. Sin plantillas genéricas.</span>
+        <span data-en>We create a unique digital identity that reflects your career and specialty. No generic templates.</span>
+      </div>
+    </div>
+    <div class="service-item fade-up">
+      <div class="service-num">02</div>
+      <div class="service-title">
+        <span data-es>Mantenimiento anual</span>
+        <span data-en>Annual maintenance</span>
+      </div>
+      <div class="service-desc">
+        <span data-es>Actualizaciones de contenido, seguridad garantizada, respaldos automáticos y soporte técnico continuo.</span>
+        <span data-en>Content updates, guaranteed security, automatic backups, and ongoing technical support.</span>
+      </div>
+    </div>
+    <div class="service-item fade-up">
+      <div class="service-num">03</div>
+      <div class="service-title">SEO <span data-es>local</span><span data-en>local</span></div>
+      <div class="service-desc">
+        <span data-es>Optimización para que tus clientes potenciales te encuentren primero en Google cuando busquen tu especialidad.</span>
+        <span data-en>Optimization so your potential clients find you first on Google when searching for your specialty.</span>
+      </div>
+    </div>
+    <div class="service-item fade-up">
+      <div class="service-num">04</div>
+      <div class="service-title">
+        <span data-es>Citas en línea</span>
+        <span data-en>Online booking</span>
+      </div>
+      <div class="service-desc">
+        <span data-es>Integración de sistemas de agendamiento para que tus clientes puedan reservar citas 24 horas al día.</span>
+        <span data-en>Booking system integration so your clients can schedule appointments 24 hours a day.</span>
+      </div>
+    </div>
+    <div class="service-item fade-up">
+      <div class="service-num">05</div>
+      <div class="service-title">
+        <span data-es>Diseño responsive</span>
+        <span data-en>Responsive design</span>
+      </div>
+      <div class="service-desc">
+        <span data-es>Tu página se verá perfecta en cualquier dispositivo. Teléfono, tablet o computadora de escritorio.</span>
+        <span data-en>Your page will look perfect on any device. Phone, tablet, or desktop computer.</span>
+      </div>
+    </div>
+    <div class="service-item fade-up">
+      <div class="service-num">06</div>
+      <div class="service-title">
+        <span data-es>Analítica avanzada</span>
+        <span data-en>Advanced analytics</span>
+      </div>
+      <div class="service-desc">
+        <span data-es>Reportes mensuales con métricas clave: visitas, conversiones y comportamiento de tus visitantes.</span>
+        <span data-en>Monthly reports with key metrics: visits, conversions, and visitor behavior.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item fade-up">
+    <div class="stat-num">50<span>+</span></div>
+    <div class="stat-label">
+      <span data-es>Profesionales</span>
+      <span data-en>Professionals</span>
+    </div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num">3<span>x</span></div>
+    <div class="stat-label">
+      <span data-es>Más consultas</span>
+      <span data-en>More inquiries</span>
+    </div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num">48<span>h</span></div>
+    <div class="stat-label">
+      <span data-es>Entrega inicial</span>
+      <span data-en>Initial delivery</span>
+    </div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num">99<span>%</span></div>
+    <div class="stat-label">
+      <span data-es>Satisfacción</span>
+      <span data-en>Satisfaction</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROFESSIONS -->
+<section class="professions" id="profesiones">
+  <div class="prof-intro">
+    <div class="prof-intro-left">
+      <p class="section-tag">
+        <span data-es>Ejemplos reales</span>
+        <span data-en>Real examples</span>
+      </p>
+      <h2 class="section-title">
+        <span data-es>¿Cómo se vería<br>tu <em>página?</em></span>
+        <span data-en>What would your<br><em>page</em> look like?</span>
+      </h2>
+    </div>
+    <div class="prof-intro-right">
+      <p>
+        <span data-es>Cada profesión tiene su propia identidad visual. Haz clic en tu área para ver una muestra de cómo luciría tu presencia digital con NexForm. Cada sitio es completamente personalizado con tu nombre, especialidad, servicios y datos de contacto.</span>
+        <span data-en>Each profession has its own visual identity. Click on your area to see a sample of what your digital presence would look like with NexForm. Each site is fully customized with your name, specialty, services, and contact information.</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="prof-tabs">
+    <button class="prof-tab active" id="tab-law" onclick="switchTab('law')">⚖️ 
+      <span data-es>Abogados</span>
+      <span data-en>Lawyers</span>
+    </button>
+    <button class="prof-tab" id="tab-med" onclick="switchTab('med')">🩺 
+      <span data-es>Médicos</span>
+      <span data-en>Doctors</span>
+    </button>
+    <button class="prof-tab" id="tab-arch" onclick="switchTab('arch')">📐 
+      <span data-es>Arquitectos</span>
+      <span data-en>Architects</span>
+    </button>
+  </div>
+
+  <!-- LAW PANEL -->
+  <div class="prof-panel active" id="panel-law">
+    <div class="prof-panel-info">
+      <h3 class="prof-panel-title">
+        <span data-es>Lic. Carlos Mendoza<br>& Asociados</span>
+        <span data-en>Atty. Carlos Mendoza<br>& Associates</span>
+      </h3>
+      <p class="prof-panel-firm">
+        <span data-es>Despacho jurídico — Derecho civil & corporativo</span>
+        <span data-en>Law firm — Civil & corporate law</span>
+      </p>
+      <p class="prof-panel-desc">
+        <span data-es>Un sitio elegante y autoritario que transmite confianza desde el primer clic. Tus clientes encontrarán fácilmente tus áreas de práctica, tu historial y cómo agendar una consulta.</span>
+        <span data-en>An elegant, authoritative site that conveys trust from the first click. Your clients will easily find your practice areas, track record, and how to schedule a consultation.</span>
+      </p>
+      <ul class="prof-features">
+        <li>
+          <span data-es>Página de áreas de práctica detallada</span>
+          <span data-en>Detailed practice areas page</span>
+        </li>
+        <li>
+          <span data-es>Perfil del despacho y equipo</span>
+          <span data-en>Firm and team profile</span>
+        </li>
+        <li>
+          <span data-es>Formulario de consulta confidencial</span>
+          <span data-en>Confidential consultation form</span>
+        </li>
+        <li>
+          <span data-es>Blog legal optimizado para SEO</span>
+          <span data-en>SEO-optimized legal blog</span>
+        </li>
+        <li>
+          <span data-es>Integración con Google Maps</span>
+          <span data-en>Google Maps integration</span>
+        </li>
+      </ul>
+      <a href="#contacto" class="prof-cta">
+        <span data-es>Quiero este diseño</span>
+        <span data-en>I want this design</span>
+        →
+      </a>
+    </div>
+    <div class="prof-panel-preview">
+      <div class="mock-browser">
+        <div class="browser-bar">
+          <div class="browser-dots">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+          </div>
+          <div class="browser-url">mendoza-asociados.com</div>
+        </div>
+        <div class="browser-body">
+          <div class="law-preview">
+            <div class="law-preview-nav">
+              <div class="law-preview-logo">Mendoza & Asociados</div>
+              <div class="law-preview-links">
+                <span>Inicio</span><span>Práctica</span><span>Equipo</span><span>Contacto</span>
+              </div>
+            </div>
+            <div class="law-preview-hero">
+              <div class="law-preview-tag">Despacho Jurídico · Est. 2008</div>
+              <div class="law-preview-title">Defensa legal<br>sin concesiones.</div>
+              <div class="law-preview-sub">Más de 15 años protegiendo los intereses de nuestros clientes con rigor, discreción y excelencia.</div>
+              <div class="law-preview-btn">Agendar consulta</div>
+            </div>
+            <div class="law-preview-areas">
+              <div class="law-area-chip">Derecho Civil</div>
+              <div class="law-area-chip">Derecho Corporativo</div>
+              <div class="law-area-chip">Derecho Familiar</div>
+              <div class="law-area-chip">Litigios</div>
+              <div class="law-area-chip">Contratos</div>
+              <div class="law-area-chip">Consultoría</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MED PANEL -->
+  <div class="prof-panel" id="panel-med">
+    <div class="prof-panel-info">
+      <h3 class="prof-panel-title">
+        <span data-es>Dra. Ana Sofía Reyes<br>Cardióloga</span>
+        <span data-en>Dr. Ana Sofía Reyes<br>Cardiologist</span>
+      </h3>
+      <p class="prof-panel-firm">
+        <span data-es>Consulta privada — Cardiología intervencionista</span>
+        <span data-en>Private practice — Interventional cardiology</span>
+      </p>
+      <p class="prof-panel-desc">
+        <span data-es>Un sitio limpio y profesional que genera confianza en pacientes y les permite prepararse para su consulta. Información clara, citas fáciles, credenciales a la vista.</span>
+        <span data-en>A clean, professional site that builds patient trust and helps them prepare for their appointment. Clear information, easy scheduling, credentials front and center.</span>
+      </p>
+      <ul class="prof-features">
+        <li>
+          <span data-es>Sistema de citas en línea</span>
+          <span data-en>Online appointment system</span>
+        </li>
+        <li>
+          <span data-es>Sección de especialidades y tratamientos</span>
+          <span data-en>Specialties and treatments section</span>
+        </li>
+        <li>
+          <span data-es>Credenciales y certificaciones visibles</span>
+          <span data-en>Visible credentials and certifications</span>
+        </li>
+        <li>
+          <span data-es>Testimonios de pacientes</span>
+          <span data-en>Patient testimonials</span>
+        </li>
+        <li>
+          <span data-es>Preguntas frecuentes médicas</span>
+          <span data-en>Medical FAQ section</span>
+        </li>
+      </ul>
+      <a href="#contacto" class="prof-cta">
+        <span data-es>Quiero este diseño</span>
+        <span data-en>I want this design</span>
+        →
+      </a>
+    </div>
+    <div class="prof-panel-preview">
+      <div class="mock-browser">
+        <div class="browser-bar">
+          <div class="browser-dots">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+          </div>
+          <div class="browser-url">draanareyes.com</div>
+        </div>
+        <div class="browser-body">
+          <div class="med-preview">
+            <div class="med-preview-nav">
+              <div class="med-preview-logo">Dra. Ana Sofía Reyes</div>
+              <div class="med-preview-links">
+                <span>Inicio</span><span>Servicios</span><span>Sobre mí</span><span>Citas</span>
+              </div>
+            </div>
+            <div class="med-banner">
+              <div class="med-banner-title">Cardiología con<br>enfoque humano.</div>
+              <div class="med-banner-right">
+                Cardióloga intervencionista certificada.<br>
+                Más de 12 años de experiencia clínica.<br><br>
+                <span style="display:inline-block;background:var(--med-accent);padding:.3rem .7rem;font-size:.6rem;color:#fff;letter-spacing:.1em;">Agendar cita →</span>
+              </div>
+            </div>
+            <div class="med-cards">
+              <div class="med-card">
+                <div class="med-card-icon">❤️</div>
+                <div class="med-card-t">Ecocardiograma</div>
+                <div class="med-card-s">Diagnóstico por imagen del corazón</div>
+              </div>
+              <div class="med-card">
+                <div class="med-card-icon">📋</div>
+                <div class="med-card-t">Consulta general</div>
+                <div class="med-card-s">Evaluación integral cardiovascular</div>
+              </div>
+              <div class="med-card">
+                <div class="med-card-icon">💊</div>
+                <div class="med-card-t">Seguimiento</div>
+                <div class="med-card-s">Control y ajuste de tratamiento</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCH PANEL -->
+  <div class="prof-panel" id="panel-arch">
+    <div class="prof-panel-info">
+      <h3 class="prof-panel-title">
+        <span data-es>Arq. Rodrigo Vargas<br>Studio</span>
+        <span data-en>Arch. Rodrigo Vargas<br>Studio</span>
+      </h3>
+      <p class="prof-panel-firm">
+        <span data-es>Arquitectura & diseño interior — Proyectos residenciales</span>
+        <span data-en>Architecture & interior design — Residential projects</span>
+      </p>
+      <p class="prof-panel-desc">
+        <span data-es>Un portafolio digital impactante que habla por sí solo. Tus proyectos, tu visión, tus premios. Todo presentado con la estética que merece tu trabajo.</span>
+        <span data-en>A striking digital portfolio that speaks for itself. Your projects, your vision, your awards. All presented with the aesthetic your work deserves.</span>
+      </p>
+      <ul class="prof-features">
+        <li>
+          <span data-es>Galería de proyectos interactiva</span>
+          <span data-en>Interactive project gallery</span>
+        </li>
+        <li>
+          <span data-es>Perfil del estudio y filosofía</span>
+          <span data-en>Studio profile and philosophy</span>
+        </li>
+        <li>
+          <span data-es>Formulario para cotizaciones de proyectos</span>
+          <span data-en>Project quote request form</span>
+        </li>
+        <li>
+          <span data-es>Sección de premios y publicaciones</span>
+          <span data-en>Awards and publications section</span>
+        </li>
+        <li>
+          <span data-es>Velocidad de carga optimizada para imágenes</span>
+          <span data-en>Image-optimized loading speed</span>
+        </li>
+      </ul>
+      <a href="#contacto" class="prof-cta">
+        <span data-es>Quiero este diseño</span>
+        <span data-en>I want this design</span>
+        →
+      </a>
+    </div>
+    <div class="prof-panel-preview">
+      <div class="mock-browser">
+        <div class="browser-bar">
+          <div class="browser-dots">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+          </div>
+          <div class="browser-url">vargas-estudio.com</div>
+        </div>
+        <div class="browser-body">
+          <div class="arch-preview">
+            <div class="arch-preview-nav">
+              <div class="arch-preview-logo">Vargas · Studio</div>
+              <div class="arch-preview-links">
+                <span>Proyectos</span><span>Estudio</span><span>Proceso</span><span>Contacto</span>
+              </div>
+            </div>
+            <div class="arch-hero-grid">
+              <div class="arch-main-img">
+                <div class="arch-main-label">Casa Montaña<br><span style="font-size:.6rem;opacity:.7">Residencia · 2024</span></div>
+              </div>
+              <div class="arch-side">
+                <div class="arch-side-card">
+                  <b>Proyectos completados</b>
+                  <span style="font-size:1rem;font-family:'Cormorant Garamond',serif;color:#333;">47</span>
+                </div>
+                <div class="arch-side-card">
+                  <b>Especialidad</b>
+                  Residencial de alto impacto
+                </div>
+                <div class="arch-side-card" style="background:var(--arch-accent)88;cursor:pointer;">
+                  <b style="color:#fff;">Solicitar cotización →</b>
+                </div>
+              </div>
+            </div>
+            <div class="arch-projects">
+              <div class="arch-proj">
+                <div class="arch-proj-img arch-proj-img-1"></div>
+                <div class="arch-proj-title">Villa Serena</div>
+                <div>Residencial · 2023</div>
+              </div>
+              <div class="arch-proj">
+                <div class="arch-proj-img arch-proj-img-2"></div>
+                <div class="arch-proj-title">Oficinas Norte</div>
+                <div>Corporativo · 2023</div>
+              </div>
+              <div class="arch-proj">
+                <div class="arch-proj-img arch-proj-img-3"></div>
+                <div class="arch-proj-title">Casa del Lago</div>
+                <div>Residencial · 2022</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="precios">
+  <p class="section-tag">
+    <span data-es>Planes claros</span>
+    <span data-en>Clear plans</span>
+  </p>
+  <h2 class="section-title">
+    <span data-es>Inversión <em>inteligente</em><br>en tu carrera</span>
+    <span data-en><em>Smart</em> investment<br>in your career</span>
+  </h2>
+  <div class="pricing-grid">
+    <div class="price-card fade-up">
+      <p class="price-label">
+        <span data-es>Inicio</span>
+        <span data-en>Starter</span>
+      </p>
+      <div class="price-amount">$499</div>
+      <p class="price-period">
+        <span data-es>+ $199/año mantenimiento</span>
+        <span data-en>+ $199/year maintenance</span>
+      </p>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>
+          <span data-es>Diseño personalizado (5 páginas)</span>
+          <span data-en>Custom design (5 pages)</span>
+        </li>
+        <li>
+          <span data-es>Dominio .com incluido</span>
+          <span data-en>.com domain included</span>
+        </li>
+        <li>
+          <span data-es>Hosting de alto rendimiento</span>
+          <span data-en>High-performance hosting</span>
+        </li>
+        <li>
+          <span data-es>Formulario de contacto</span>
+          <span data-en>Contact form</span>
+        </li>
+        <li>SEO básico</li>
+        <li>
+          <span data-es>Entrega en 5 días</span>
+          <span data-en>Delivery in 5 days</span>
+        </li>
+      </ul>
+      <a href="#contacto" class="price-btn price-btn-outline">
+        <span data-es>Comenzar</span>
+        <span data-en>Get started</span>
+      </a>
+    </div>
+    <div class="price-card featured fade-up">
+      <p class="price-label">⭐ 
+        <span data-es>Profesional — Más popular</span>
+        <span data-en>Professional — Most popular</span>
+      </p>
+      <div class="price-amount" style="color:var(--gold)">$899</div>
+      <p class="price-period">
+        <span data-es>+ $349/año mantenimiento</span>
+        <span data-en>+ $349/year maintenance</span>
+      </p>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>
+          <span data-es>Diseño premium (hasta 10 páginas)</span>
+          <span data-en>Premium design (up to 10 pages)</span>
+        </li>
+        <li>
+          <span data-es>Dominio .com + SSL</span>
+          <span data-en>.com domain + SSL</span>
+        </li>
+        <li>
+          <span data-es>Sistema de citas en línea</span>
+          <span data-en>Online booking system</span>
+        </li>
+        <li>
+          <span data-es>SEO avanzado + Google My Business</span>
+          <span data-en>Advanced SEO + Google My Business</span>
+        </li>
+        <li>
+          <span data-es>Blog integrado</span>
+          <span data-en>Integrated blog</span>
+        </li>
+        <li>
+          <span data-es>Analítica mensual</span>
+          <span data-en>Monthly analytics</span>
+        </li>
+        <li>
+          <span data-es>Soporte prioritario</span>
+          <span data-en>Priority support</span>
+        </li>
+        <li>
+          <span data-es>Entrega en 48 horas</span>
+          <span data-en>Delivery in 48 hours</span>
+        </li>
+      </ul>
+      <a href="#contacto" class="price-btn price-btn-fill">
+        <span data-es>Elegir plan</span>
+        <span data-en>Choose plan</span>
+      </a>
+    </div>
+    <div class="price-card fade-up">
+      <p class="price-label">
+        <span data-es>Élite</span>
+        <span data-en>Elite</span>
+      </p>
+      <div class="price-amount">$1,499</div>
+      <p class="price-period">
+        <span data-es>+ $599/año mantenimiento</span>
+        <span data-en>+ $599/year maintenance</span>
+      </p>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>
+          <span data-es>Todo lo del plan Profesional</span>
+          <span data-en>Everything in Professional</span>
+        </li>
+        <li>
+          <span data-es>Fotografía profesional coordinada</span>
+          <span data-en>Coordinated professional photography</span>
+        </li>
+        <li>
+          <span data-es>Branding completo (logo, tarjetas)</span>
+          <span data-en>Complete branding (logo, cards)</span>
+        </li>
+        <li>
+          <span data-es>Portal de clientes privado</span>
+          <span data-en>Private client portal</span>
+        </li>
+        <li>
+          <span data-es>Multiidioma (ES + EN)</span>
+          <span data-en>Multilingual (ES + EN)</span>
+        </li>
+        <li>
+          <span data-es>Actualizaciones ilimitadas</span>
+          <span data-en>Unlimited updates</span>
+        </li>
+        <li>
+          <span data-es>Gestor de cuenta dedicado</span>
+          <span data-en>Dedicated account manager</span>
+        </li>
+      </ul>
+      <a href="#contacto" class="price-btn price-btn-outline">
+        <span data-es>Contactar</span>
+        <span data-en>Contact us</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contacto">
+  <p class="section-tag">
+    <span data-es>Hablemos</span>
+    <span data-en>Let's talk</span>
+  </p>
+  <h2 class="section-title">
+    <span data-es>Tu página web<br>en <em>48 horas</em></span>
+    <span data-en>Your website<br>in <em>48 hours</em></span>
+  </h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p>
+        <span data-es>Cuéntanos sobre tu práctica y te preparamos una propuesta visual personalizada en menos de 24 horas. Sin compromiso, sin letra chica.</span>
+        <span data-en>Tell us about your practice and we'll prepare a personalized visual proposal in less than 24 hours. No commitment, no fine print.</span>
+      </p>
+      <div class="contact-detail">
+        <div class="contact-detail-label">Email</div>
+        <div class="contact-detail-val">hola@nexform28.cr</div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-label">WhatsApp</div>
+        <div class="contact-detail-val">+1 (555) 234-5678</div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-label">
+          <span data-es>Horario</span>
+          <span data-en>Hours</span>
+        </div>
+        <div class="contact-detail-val">
+          <span data-es>Lun – Vie, 9am – 6pm</span>
+          <span data-en>Mon – Fri, 9am – 6pm</span>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-field">
+        <label>
+          <span data-es>Nombre completo</span>
+          <span data-en>Full name</span>
+        </label>
+        <input type="text" placeholder="Lic. / Dr. / Arq. ...">
+      </div>
+      <div class="form-field">
+        <label>
+          <span data-es>Profesión</span>
+          <span data-en>Profession</span>
+        </label>
+        <select>
+          <option value="">
+            -- 
+            <span data-es>Seleccionar</span>
+            <span data-en>Select</span>
+            --
+          </option>
+          <option>
+            <span data-es>Abogado / Despacho jurídico</span>
+            <span data-en>Lawyer / Law firm</span>
+          </option>
+          <option>
+            <span data-es>Médico / Clínica</span>
+            <span data-en>Doctor / Clinic</span>
+          </option>
+          <option>
+            <span data-es>Arquitecto / Estudio de diseño</span>
+            <span data-en>Architect / Design studio</span>
+          </option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>
+          <span data-es>Correo electrónico</span>
+          <span data-en>Email address</span>
+        </label>
+        <input type="email" placeholder="tu@correo.com">
+      </div>
+      <div class="form-field">
+        <label>
+          <span data-es>Mensaje</span>
+          <span data-en>Message</span>
+        </label>
+        <textarea placeholder="..."></textarea>
+      </div>
+      <button class="form-submit">
+        <span data-es>Enviar solicitud</span>
+        <span data-en>Send request</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;letter-spacing:.04em;color:var(--paper);line-height:1;">Nex<span style="color:var(--gold)">Form</span></div>
+    <div style="display:flex;align-items:center;gap:.4rem;margin-top:3px;">
+      <div style="flex:1;height:1px;background:var(--gold);min-width:18px;"></div>
+      <span style="font-family:'DM Sans',sans-serif;font-size:.55rem;font-weight:600;color:var(--gold);letter-spacing:.06em;">28</span>
+      <div style="flex:1;height:1px;background:var(--gold);min-width:18px;"></div>
+      <span style="font-family:'DM Sans',sans-serif;font-size:.48rem;color:#555;letter-spacing:.18em;text-transform:uppercase;">CR</span>
+    </div>
+  </div>
+  <div class="footer-copy">© 2025 NexForm. 
+    <span data-es>Todos los derechos reservados.</span>
+    <span data-en>All rights reserved.</span>
+  </div>
+  <div class="footer-links">
+    <a href="#">
+      <span data-es>Privacidad</span>
+      <span data-en>Privacy</span>
+    </a>
+    <a href="#">
+      <span data-es>Términos</span>
+      <span data-en>Terms</span>
+    </a>
+    <a href="#contacto">
+      <span data-es>Contacto</span>
+      <span data-en>Contact</span>
+    </a>
+  </div>
+</footer>
+
+<script>
+// Nav scroll effect
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animateCursor() {
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  rx += (mx - rx) * .15;
+  ry += (my - ry) * .15;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+document.querySelectorAll('a,button,input,select,textarea').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; ring.style.width='60px'; ring.style.height='60px'; });
+  el.addEventListener('mouseleave', () => { cursor.style.width = '10px'; cursor.style.height = '10px'; ring.style.width='36px'; ring.style.height='36px'; });
+});
+
+// Language
+function setLang(lang) {
+  if (lang === 'en') {
+    document.body.classList.add('en');
+    document.getElementById('btn-en').classList.add('active');
+    document.getElementById('btn-es').classList.remove('active');
+  } else {
+    document.body.classList.remove('en');
+    document.getElementById('btn-es').classList.add('active');
+    document.getElementById('btn-en').classList.remove('active');
+  }
+}
+
+// Tab switching
+function switchTab(tab) {
+  document.querySelectorAll('.prof-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.prof-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+// Scroll animations
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
