@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -33,29 +34,9 @@
     background: var(--paper);
     color: var(--ink);
     overflow-x: hidden;
-    cursor: none;
-  }
+    }
 
-  /* Custom cursor */
-  .cursor {
-    width: 10px; height: 10px;
-    background: var(--gold);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: width .2s, height .2s, background .2s;
-  }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1.5px solid var(--gold);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: transform .12s ease-out, width .2s, height .2s;
-    opacity: .6;
-  }
+  
 
   /* Language switcher */
   .lang-switcher {
@@ -70,8 +51,7 @@
     border: 1px solid var(--gold);
     background: transparent;
     color: var(--ink);
-    cursor: none;
-    transition: background .25s, color .25s;
+      transition: background .25s, color .25s;
   }
   .lang-btn.active, .lang-btn:hover {
     background: var(--gold);
@@ -194,8 +174,7 @@
     padding: 1.8rem;
     position: relative; overflow: hidden;
     transition: transform .4s cubic-bezier(.25,.8,.25,1);
-    cursor: none;
-  }
+    }
   .hero-card:hover { transform: scale(.97); }
   .hero-card-num {
     font-family: 'Cormorant Garamond', serif;
@@ -320,7 +299,7 @@
     font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
     padding: 1rem 2rem;
     border: none; background: transparent;
-    color: var(--muted); cursor: none;
+    color: var(--muted); cursor: pointer;
     position: relative; font-family: 'DM Sans', sans-serif;
     font-weight: 400;
     transition: color .3s;
@@ -524,7 +503,7 @@
     display: block; width: 100%;
     padding: .9rem; text-align: center;
     font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
-    text-decoration: none; cursor: none;
+    text-decoration: none; cursor: pointer;
     transition: background .3s, color .3s;
   }
   .price-btn-outline {
@@ -583,11 +562,11 @@
     border-color: var(--gold);
   }
   .form-field textarea { min-height: 100px; resize: vertical; }
-  .form-field select { cursor: none; }
+  .form-field select { cursor: pointer; }
   .form-field select option { background: #111; }
   .form-submit {
     padding: 1rem 2rem; background: var(--gold); color: #fff;
-    border: none; cursor: none;
+    border: none; cursor: pointer;
     font-family: 'DM Sans', sans-serif;
     font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
     align-self: flex-start;
@@ -651,8 +630,6 @@
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
 
 <!-- Language Switcher -->
 <div class="lang-switcher">
@@ -1379,7 +1356,7 @@
       </p>
       <div class="contact-detail">
         <div class="contact-detail-label">Email</div>
-        <div class="contact-detail-val">hola@nexform28.cr</div>
+        <div class="contact-detail-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="791116151839171c011f160b144b41571a0b">[email&#160;protected]</a></div>
       </div>
       <div class="contact-detail">
         <div class="contact-detail-label">WhatsApp</div>
@@ -1483,31 +1460,12 @@
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Nav scroll effect
 window.addEventListener('scroll', () => {
   document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 60);
 });
 
-// Cursor
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-function animateCursor() {
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-  rx += (mx - rx) * .15;
-  ry += (my - ry) * .15;
-  ring.style.left = rx + 'px';
-  ring.style.top = ry + 'px';
-  requestAnimationFrame(animateCursor);
-}
-animateCursor();
-document.querySelectorAll('a,button,input,select,textarea').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; ring.style.width='60px'; ring.style.height='60px'; });
-  el.addEventListener('mouseleave', () => { cursor.style.width = '10px'; cursor.style.height = '10px'; ring.style.width='36px'; ring.style.height='36px'; });
-});
 
 // Language
 function setLang(lang) {
@@ -1526,10 +1484,4 @@ function setLang(lang) {
 function switchTab(tab) {
   document.querySelectorAll('.prof-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.prof-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  document.getElementById('panel-' + tab).classList.add('active');
-}
-
-// Scroll animations
-const obs = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
+  docume
